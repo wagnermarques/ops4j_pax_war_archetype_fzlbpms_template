@@ -15,6 +15,7 @@ the build will ocurr automatically at the build project
 if the dojo sdk was not present, it will be downloaded automatically base on <dojo.version> pom propertie.
 
 I am learning all this technology, so any help is well accepted.
+This is a snapshot and be testing.
 
 
 
