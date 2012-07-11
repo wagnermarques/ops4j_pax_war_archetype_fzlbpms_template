@@ -1,0 +1,50 @@
+* {
+	margin: 0;
+	padding: 0;
+}
+
+body {
+	/*background: blue url('images/body_bg.gif') top left repeat-x;*/
+	background: white  url('images/body_bg.gif') repeat-x;
+}
+
+#quadro_principal {
+	border: solid 0px blue;	
+	position: relative;
+	width: 87%;
+	margin: 5% auto 0;
+	/*width: 100%;*/
+	/*margin: 10% auto 0 auto;*/
+}
+
+#logo {
+	font-size:large;
+	font-style:italic;
+	text-align: center;
+	/*text-shadow: 0px 5px 1px #2C818E;*/
+	text-shadow: 0px 3px 3px black;
+	position: relative;
+	margin: -2% auto;
+	height: 112px;
+	line-height: 112px;
+}
+
+#nav {
+	position: relative;
+	border-width: thin; 
+	bottom: 10%;
+	left: 0;
+	width: 100%;
+	
+	line-height: 66px;
+	background:  transparent url('images/nav_bg.gif');
+}
+
+#footer {
+	position: relative;
+	height:5%;
+	width: 100%;
+	/*background: #6BA1AD url('images/bg3.gif') top left repeat-x;*/	
+	/*border: solid 1px blue;*/	
+}
+

@@ -1,0 +1,291 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+
+	<modelVersion>4.0.0</modelVersion>
+	<groupId>br.edu.fzlbpms.template</groupId>
+	<artifactId>ops4j_pax_war_archetype_fzlbpms_template</artifactId>
+	<version>1.0-SNAPSHOT</version>
+	<packaging>war</packaging>
+	<name>ops4j_pax_war_archetype_fzlbpms_template</name>
+	<description>ops4j_pax_war_archetype_fzlbpms_template war</description>
+	<properties>
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+
+		<!-- plugins properties -->
+		<maven-bundle-plugin.version>2.3.4</maven-bundle-plugin.version>
+		<maven-war-plugin.version>2.1.1</maven-war-plugin.version>
+		<maven-surefire-plugin-version>2.12</maven-surefire-plugin-version>
+
+		<!-- dependencies properties -->
+		<servlet-api.version>2.5</servlet-api.version>
+		<dwr.version>3.0.M1</dwr.version>
+		<jetty.version>6.1.10</jetty.version>
+
+		<!-- fzlbpms plataform paths -->
+		<fzl_home>/run/media/wagner/fzlbpms_env/PROGSATIVOS/fzlbpms</fzl_home>
+
+		<!--
+		dojo app build parameters
+		-->
+		<dojo.version>1.8.0b1</dojo.version>
+		<!-- root dir of all js code -->
+		<dojo.app.baseUrl>${project.basedir}/src/main/webapp/resources/js</dojo.app.baseUrl>
+		<!-- does not run buil.sh (the dojo app build script)
+		build dojo app is needed? not aways, maybe...
+		-->
+		<dojo.app.skip_build>true</dojo.app.skip_build>
+		<github.global.server>github</github.global.server>
+	</properties>
+	<dependencies>
+		<dependency>
+			<groupId>javax.servlet</groupId>
+			<artifactId>servlet-api</artifactId>
+			<version>${servlet-api.version}</version>
+		</dependency>
+
+		<!-- DRW -->
+		<dependency>
+			<groupId>org.directwebremoting</groupId>
+			<artifactId>dwr</artifactId>
+			<version>${dwr.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>commons-logging</groupId>
+			<artifactId>commons-logging</artifactId>
+			<version>1.0.4</version>
+		</dependency>
+		<dependency>
+			<groupId>commons-fileupload</groupId>
+			<artifactId>commons-fileupload</artifactId>
+			<version>1.2</version>
+		</dependency>
+		<dependency>
+			<groupId>junit</groupId>
+			<artifactId>junit</artifactId>
+			<version>4.8.2</version>
+			<scope>test</scope>
+		</dependency>
+	</dependencies>
+	<build>
+		<plugins>
+
+			<!-- tooling dojo app integration
+
+			wagon-maven-plugin
+			to download dojo based on ${dojo.version}
+
+			maven-antrun-plugin
+			to untar dojo sdk
+			to copy dojo, dijit, dojox and util folders baseurl from dojo unpacked to the project folders
+			to run build.sh
+
+			Note:
+			if sdk is present, <skip>true</skip> skip the download procedure
+			-->
+			<plugin>
+				<groupId>org.codehaus.mojo</groupId>
+				<artifactId>wagon-maven-plugin</artifactId>
+				<version>1.0-beta-4</version>
+				<executions>
+					<execution>
+						<id>download-dojo</id>
+						<phase>generate-resources</phase>
+						<goals>
+							<goal>download-single</goal>
+						</goals>
+						<configuration>
+							<skip>true</skip>
+							<serverId>dojotoolkit</serverId>
+							<url>http://download.dojotoolkit.org/release-${dojo.version}</url>
+							<!-- fromFile>dojo-release-${dojo.version}.tar.gz</fromFile -->
+							<fromFile>dojo-release-${dojo.version}-src.tar.gz</fromFile>
+							<toDir>${project.basedir}</toDir>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-antrun-plugin</artifactId>
+				<executions>
+					<execution>
+						<id>building_dojo</id>
+						<configuration>
+							<tasks>
+
+								<untar compression="gzip"
+								src="${project.basedir}/dojo-release-${dojo.version}-src.tar.gz"
+								dest="${project.build.directory}"/>
+								<copy  todir="${dojo.app.baseUrl}/dojo" >
+									<fileset dir="${project.build.directory}/dojo-release-${dojo.version}-src/dojo" includes="**"/>
+								</copy>
+								<copy  todir="${dojo.app.baseUrl}/dijit" >
+									<fileset dir="${project.build.directory}/dojo-release-${dojo.version}-src/dijit" includes="**"/>
+								</copy>
+								<copy  todir="${dojo.app.baseUrl}/dojox" >
+									<fileset dir="${project.build.directory}/dojo-release-${dojo.version}-src/dojox" includes="**"/>
+								</copy>
+								<copy  todir="${dojo.app.baseUrl}/util" >
+									<fileset dir="${project.build.directory}/dojo-release-${dojo.version}-src/util" includes="**"/>
+								</copy>
+								<exec
+								executable="${project.basedir}/build.sh" failonerror="true">
+									<arg line="${dojo.app.skip_build}"/>
+								</exec>
+
+							</tasks>
+						</configuration>
+						<phase>process-resources</phase>
+						<!-- phase>pre-integration-test</phase -->
+						<goals>
+							<goal>run</goal>
+						</goals>
+					</execution>
+					<execution>
+						<id>cleaning_dojo_app_dist</id>
+						<configuration>
+							<tasks>
+
+								<delete>
+									<fileset dir="${dojo.app.baseUrl}/dist" includes="**"/>
+								</delete>
+								<delete>
+									<fileset dir="${dojo.app.baseUrl}/dojo" includes="**"/>
+								</delete>
+								<delete>
+									<fileset dir="${dojo.app.baseUrl}/dijit" includes="**"/>
+								</delete>
+								<delete>
+									<fileset dir="${dojo.app.baseUrl}/dojox" includes="**"/>
+								</delete>
+								<delete >
+									<fileset dir="${dojo.app.baseUrl}/util" includes="**"/>
+								</delete>
+
+							</tasks>
+						</configuration>
+						<phase>clean</phase>
+						<!-- phase>pre-integration-test</phase -->
+						<goals>
+							<goal>run</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
+
+			<!-- bundle tooling -->
+			<plugin>
+				<groupId>org.apache.felix</groupId>
+				<artifactId>maven-bundle-plugin</artifactId>
+				<version>${maven-bundle-plugin.version}</version>
+				<executions>
+					<execution>
+						<id>bundle-manifest</id>
+						<phase>process-sources</phase>
+						<goals>
+							<goal>manifest</goal>
+						</goals>
+						<configuration>
+							<instructions>
+								<Bundle-SymbolicName>${project.artifactId}</Bundle-SymbolicName>
+								<Bundle-Version>${project.version}</Bundle-Version>
+
+								<!--
+								nao sei exatamente como funciona esses dependencias
+								TODO tem que estudar isso...
+								<Embed-Dependency>*;scope=compile|runtime</Embed-Dependency>
+								<Embed-Directory>WEB-INF/lib</Embed-Directory>
+								<Embed-Transitive>true</Embed-Transitive>
+								<Import-Package>*;resolution:=optional</Import-Package>
+								<Web-ContextPath>/sample</Web-ContextPath>
+								<Webapp-Context>/sample</Webapp-Context>
+								<_wab>src/main/webapp</_wab>
+								-->
+								<Import-Package>*</Import-Package>
+							</instructions>
+						</configuration>
+					</execution>
+				</executions>
+				<configuration>
+					<supportedProjectTypes>
+						<supportedProjectType>jar</supportedProjectType>
+						<supportedProjectType>bundle</supportedProjectType>
+						<supportedProjectType>war</supportedProjectType>
+					</supportedProjectTypes>
+				</configuration>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-war-plugin</artifactId>
+				<version>${maven-war-plugin.version}</version>
+				<configuration>
+					<archive>
+						<manifestFile>${project.build.outputDirectory}/META-INF/MANIFEST.MF</manifestFile>
+					</archive>
+				</configuration>
+			</plugin>
+
+			<!-- test tooling -->
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-surefire-plugin</artifactId>
+				<version>${maven-surefire-plugin-version}</version>
+				<configuration>
+					<testFailureIgnore>true</testFailureIgnore>
+					<failIfNoTests>false</failIfNoTests>
+				</configuration>
+			</plugin>
+
+			<!-- webcontainer -->
+			<plugin>
+				<groupId>org.mortbay.jetty</groupId>
+				<artifactId>maven-jetty-plugin</artifactId>
+				<version>${jetty.version}</version>
+				<configuration>
+					<scanIntervalSeconds>10</scanIntervalSeconds>
+					<stopKey>foo</stopKey>
+					<stopPort>9999</stopPort>
+				</configuration>
+				<executions>
+					<execution>
+						<id>start-jetty</id>
+						<phase>pre-integration-test</phase>
+						<goals>
+							<goal>run</goal>
+						</goals>
+						<configuration>
+							<scanIntervalSeconds>0</scanIntervalSeconds>
+							<daemon>true</daemon>
+						</configuration>
+					</execution>
+					<execution>
+						<id>stop-jetty</id>
+						<phase>post-integration-test</phase>
+						<goals>
+							<goal>stop</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
+			<plugin>
+				<groupId>com.github.github</groupId>
+				<artifactId>downloads-maven-plugin</artifactId>
+				<version>0.5</version>
+				<configuration>
+					<description>${project.version} release of ${project.name}</description>
+					<override>true</override>
+					<includeAttached>true</includeAttached>
+				</configuration>
+			</plugin>
+		</plugins>
+	</build>
+	<!--
+	<scm>
+		<connection>scm:svn:http://somerepository.com/svn_repo/trunk</connection>
+		https://github.com/ops4j/org.ops4j.pax.web.git
+		<developerConnection>scm:svn:https://somerepository.com/svn_repo/trunk</developerConnection>
+		<url>http://somerepository.com/view.cvs</url>
+	</scm>
+	-->
+</project>
