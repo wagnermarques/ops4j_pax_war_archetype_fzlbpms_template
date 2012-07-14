@@ -1,11 +1,74 @@
 <html>
-<head>
-    <title>My Page</title>
-</head>
-<body>
+	<head>
 
-    <a href="my.do">My Servlet</a>
-    <a href="my.jsp">My JSP</a>
+		<!--
+		define it when to create funcional projects based on this template project
+		TODO: in case of create project wizard, it could be replaced dinamically
+		-->
+		<title>index-title-tag-not-defined-yet</title>
+		<meta name="description" content="index-meta-description-tag-not-defined-yet" />
+		<meta name="author" content="index-meta-author-tag-not-defined-yet" />
+		<meta name="viewport" content="width=device-width; initial-scale=1.0" />
 
-</body>
+
+		<!-- from html5 aptana template -->
+		<!-- meta charset="utf-8" / -->
+		<meta charset="ISO-8859-1" />
+
+
+		<!-- Always force latest IE rendering engine (even in intranet) & Chrome Frame
+		Remove this if you use the .htaccess -->
+		<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+
+
+		<!-- Application-specific CSS should be stored in your application’s package to ensure portability and to allow
+		the build system to combine & minify it. -->
+		<link rel="stylesheet" href="resources/js/dist/app/resources/app.css">
+
+
+		<!--
+		dojo widgets will need it to be rendered properly
+
+		the optimzed versions will be loaded, so
+		it will be removed from here soon, a think.
+
+		<link rel="stylesheet" href="./dojo/1.7.1/dojo/resources/dojo.css">
+		<link rel="stylesheet" href="./dojo/1.7.1/dijit/themes/claro/claro.css">
+		<link rel="stylesheet" href="./dojox/grid/enhanced/resources/claro/EnhancedGrid.css">
+		<link rel="stylesheet" href="./dojox/grid/enhanced/resources/EnhancedGrid_rtl.css">
+		-->
+
+		<!--  D W R  -->
+		<!-- DWR 3.0 RC2 requires engine.js is included before the DWR interface JavaScript files. -->
+		<script type='text/javascript' src='/ops4j_pax_war_archetype_fzlbpms_template/dwr/engine.js'></script>
+		<script type='text/javascript' src='/ops4j_pax_war_archetype_fzlbpms_template/dwr/util.js'></script>
+
+	</head>
+	<body class="claro">
+		<!-- dojo.js is an AMD-compliant loader script. It accepts configuration either from a data-dojo-config attribute,
+		as shown here, from a global dojoConfig object (which must be defined *before* dojo.js is loaded), or from
+		a global require object.
+
+		Configuration options for the loader can be viewed at http://livedocs.dojotoolkit.org/loader/amd
+		along with a bunch of additional information about its features.
+
+		Below, we’re doing the following:
+
+		1. Enabling the AMD loader. (async: 1)
+		2. Fixing the loader to use normal AMD resolution of unregistered module paths (relative to baseDir)
+		instead of the traditional Dojo resolution method (relative to the parent of baseDir).
+		(tlmSiblingOfDojo: 0)
+		3. Enabling debugging. (isDebug: 1)
+
+		The remainder of Dojo configuration, as well as our application’s instantiation, occurs within
+		app/run.js. -->
+		<script data-dojo-config="async: 1, tlmSiblingOfDojo: 0, isDebug: 1"
+		src="resources/js/dist/dojo/dojo.js" defer></script>
+
+		<!-- Load the loader configuration script. Note that this module ID is hard-coded in build.sh in order to provide
+		an optimised build that loads as few as one script for the entire application. If you change the name or
+		location of this module, you will need to update build.sh too. -->
+		<!-- here, the path to app runs.js loader configuration was changed compared to dojo-boilerplate-->
+		<script src="resources/js/dist/app/run.js" defer></script>
+	</body>
 </html>

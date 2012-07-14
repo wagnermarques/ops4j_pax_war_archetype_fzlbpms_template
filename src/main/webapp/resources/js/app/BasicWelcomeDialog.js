@@ -1,4 +1,12 @@
-/**
+
+
+
+
+
+
+
+
+ h/**
  * This file is a very simple example of a class declaration in Dojo. 
  * 
  * It defines the “app/Dialog” module as a new
@@ -12,3 +20,4 @@ define(['dojo/_base/declare', 'dijit/Dialog'],
         	content: "static_app_strings.greeting"
     	});
 });
+c v

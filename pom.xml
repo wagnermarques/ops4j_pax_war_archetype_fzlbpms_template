@@ -33,9 +33,18 @@ xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xs
 		<dojo.app.baseUrl>${project.basedir}/src/main/webapp/resources/js</dojo.app.baseUrl>
 		<!-- does not run buil.sh (the dojo app build script)
 		build dojo app is needed? not aways, maybe...
+		valid values is true or false
 		-->
-		<dojo.app.skip_build>true</dojo.app.skip_build>
-		<github.global.server>github</github.global.server>
+		<dojo.app.skip_build>false</dojo.app.skip_build>
+		
+		<!-- valid values are rhino and node
+			 default is node
+			 any other value will be tranformed to "rhino"
+			 
+			 dojo build documentation:
+			 http://livedocs.dojotoolkit.org/build/buildSystem
+		-->
+		<dojo.app.use_rhino_or_node>node</dojo.app.use_rhino_or_node>
 	</properties>
 	<dependencies>
 		<dependency>
@@ -131,7 +140,7 @@ xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xs
 								</copy>
 								<exec
 								executable="${project.basedir}/build.sh" failonerror="true">
-									<arg line="${dojo.app.skip_build}"/>
+									<arg line="${dojo.app.skip_build} ${dojo.app.use_rhino_or_node}"/>
 								</exec>
 
 							</tasks>
@@ -267,16 +276,6 @@ xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xs
 						</goals>
 					</execution>
 				</executions>
-			</plugin>
-			<plugin>
-				<groupId>com.github.github</groupId>
-				<artifactId>downloads-maven-plugin</artifactId>
-				<version>0.5</version>
-				<configuration>
-					<description>${project.version} release of ${project.name}</description>
-					<override>true</override>
-					<includeAttached>true</includeAttached>
-				</configuration>
 			</plugin>
 		</plugins>
 	</build>

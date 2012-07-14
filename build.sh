@@ -2,15 +2,25 @@
 
 
 set -e
-echo "====================================="
-echo "building dojo app..."
-echo "====================================="
 
 
+
+#!/bin/bash
 
 dojo_app_skip_build=$1
+use_rhino_or_node=$2
 
-if [ $dojo_app_skip_build ]; then
+
+
+echo "====================================="
+echo "building dojo app..."
+echo "[debug] dojo_app_skip_build = $dojo_app_skip_build"
+echo "[debug] use_rhino_or_node = $use_rhino_or_node"
+echo "====================================="
+
+
+
+if [ $dojo_app_skip_build == "true" ]; then
 	echo "====================================="
 	echo "SKIPING building dojo app because dojo.app.skip_build = true"
 	echo "====================================="   
@@ -18,7 +28,47 @@ if [ $dojo_app_skip_build ]; then
 fi
 
 
+echo .
+echo .
+echo "[debug] DETERMINING BETWEEN node AND rhino"
+# (if rhino was not choose at pom property, node will be used
+if [ $use_rhino_or_node ]; then 
+    echo "[debug] use_rhino_or_node pom property was informed"
+    if [ $use_rhino_or_node == "rhino" ]; then
+	echo "[debug] and is equal to rhino"
+	if  which java >/dev/null ; then 
+	    use_rhino_or_node="rhino";	    
+	else
+	    echo "[error] but java is not installed!"
+	    exit 1;	   
+	fi
+    else
+	echo "[debug] (informed) and IS NOT EQUAL to rhino";
+	echo "[debug] (informed) transforming value property to node";
+	if which node >/dev/null; then 
+	    use_rhino_or_node="node";
+	else
+	    echo "[error] but node is not installed!";
+	    exit 1;
+	fi
+    fi
+else
+    echo "[debug] use_rhino_or_node pom property WAS NOT informed"
+    echo "[debug] (not informed) so, using rhino";
+    if  which node >/dev/null; then 
+	echo "[error] but node is not installed!"
+	exit 1;
+    else
+	use_rhino_or_node="node";
+    fi    
+fi
+echo "[debug] so $use_rhino_or_node will be used"
 
+
+
+
+echo .
+echo .
 echo "# Base directory for this entire project"
 BASEDIR=$(cd $(dirname $0) && pwd)
 echo $BASEDIR
@@ -70,10 +120,17 @@ echo " Done"
 
 cd "$TOOLSDIR"
 
-if which node >/dev/null; then
-    node ../../dojo/dojo.js load=build --require "$LOADERCONF" --profile "$PROFILE" --releaseDir "$DISTDIR" "$@"
-elif which java >/dev/null; then
-    java -Xms256m -Xmx256m  -cp ../shrinksafe/js.jar:../closureCompiler/compiler.jar:../shrinksafe/shrinksafe.jar org.mozilla.javascript.tools.shell.Main  ../../dojo/dojo.js baseUrl=../../dojo load=build --require "$LOADERCONF" --profile "$PROFILE" --releaseDir "$DISTDIR" "$@"
+echo .
+echo .
+echo "--releaseDir..."
+echo "$DISTDIR" "$@"
+echo .
+echo .
+
+if [ $use_rhino_or_node == "node" ] ; then
+    node ../../dojo/dojo.js load=build --require "$LOADERCONF" --profile "$PROFILE" --releaseDir "$DISTDIR" 
+elif [ $use_rhino_or_node == "rhino" ] ; then
+    java -Xms256m -Xmx256m  -cp ../shrinksafe/js.jar:../closureCompiler/compiler.jar:../shrinksafe/shrinksafe.jar org.mozilla.javascript.tools.shell.Main  ../../dojo/dojo.js baseUrl=../../dojo load=build --require "$LOADERCONF" --profile "$PROFILE" --releaseDir "$DISTDIR"
 else
     echo "Need node.js or Java to build!"
     exit 1
