@@ -35,7 +35,7 @@ xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xs
 		build dojo app is needed? not aways, maybe...
 		valid values is true or false
 		-->
-		<dojo.app.skip_build>false</dojo.app.skip_build>
+		<dojo.app.skip_build>true</dojo.app.skip_build>
 		
 		<!-- valid values are rhino and node
 			 default is node

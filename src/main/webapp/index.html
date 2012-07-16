@@ -22,29 +22,86 @@
 
 
 		<!-- Application-specific CSS should be stored in your application’s package to ensure portability and to allow
-		the build system to combine & minify it. -->
+		the build system to combine & minify it. -->		 
 		<link rel="stylesheet" href="resources/js/dist/app/resources/app.css">
-
-
-		<!--
-		dojo widgets will need it to be rendered properly
-
-		the optimzed versions will be loaded, so
-		it will be removed from here soon, a think.
-
-		<link rel="stylesheet" href="./dojo/1.7.1/dojo/resources/dojo.css">
-		<link rel="stylesheet" href="./dojo/1.7.1/dijit/themes/claro/claro.css">
-		<link rel="stylesheet" href="./dojox/grid/enhanced/resources/claro/EnhancedGrid.css">
-		<link rel="stylesheet" href="./dojox/grid/enhanced/resources/EnhancedGrid_rtl.css">
-		-->
+				
 
 		<!--  D W R  -->
-		<!-- DWR 3.0 RC2 requires engine.js is included before the DWR interface JavaScript files. -->
 		<script type='text/javascript' src='/ops4j_pax_war_archetype_fzlbpms_template/dwr/engine.js'></script>
 		<script type='text/javascript' src='/ops4j_pax_war_archetype_fzlbpms_template/dwr/util.js'></script>
-
+		<script type='text/javascript' src='resources/js/app/resources/images/org_logo.gif'></script>
 	</head>
 	<body class="claro">
+		
+		
+		
+		<div id="wrapper">
+			<div id="header">
+				<div id="org_logo">
+					<img alt="org_logo" src="resources/js/app/resources/images/org_logo.gif"/>
+				</div>
+				<div id="org_name">
+					<h1>FZLBPMS</h1>
+				</div>
+			</div>
+	
+			
+			
+			<div id="menu">
+      		</div>
+      
+      
+      
+    	  	<div id="slider">
+				<span>slider_space</span>    
+      		</div>
+
+     
+     
+     
+      		<div id="page">
+				<div id="page_content">
+					<div class="page_content_header_box">
+						<h2>page title</h2>
+						<p>some txt...	</p>
+					</div>
+				</div>
+				
+				<div class="page_content_body">
+		  			<p>page content body...</p>
+				</div>
+				<div class="page_content_bottom">
+		  			<h3>page-bottom</h3>
+				</div>		
+     		</div><!-- page -->
+
+
+
+
+
+	      	<div id="footer">
+				fzlbpms template
+      		</div>
+
+
+
+
+	      	<div id="fixed_bootom_footer_bar">
+				<div>sdg</div>	
+      		</div><!-- barraRodapeContainer -->      
+
+
+
+
+	      	<div id="fixed_top_for_messages_bar" style="display:none">
+				<div>define message ...</div>	
+      		</div><!-- barraRodapeContainer -->      
+    	</div><!-- wrapper --->      
+
+		
+		
+		
+		
 		<!-- dojo.js is an AMD-compliant loader script. It accepts configuration either from a data-dojo-config attribute,
 		as shown here, from a global dojoConfig object (which must be defined *before* dojo.js is loaded), or from
 		a global require object.

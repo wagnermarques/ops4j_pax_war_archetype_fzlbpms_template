@@ -54,7 +54,7 @@ if [ $use_rhino_or_node ]; then
     fi
 else
     echo "[debug] use_rhino_or_node pom property WAS NOT informed"
-    echo "[debug] (not informed) so, using rhino";
+    echo "[debug] (not informed) so, using node";
     if  which node >/dev/null; then 
 	echo "[error] but node is not installed!"
 	exit 1;
