@@ -1,0 +1,13 @@
+/**
+ * If you are developing a project that makes use of Dijit widgets, you will probably want to include the two files
+ * below; otherwise, you can remove them. When building for release, Dojo will automatically combine all of your
+ * @imported CSS files into a single file.
+ *
+ * It is highly, highly recommended that you develop your CSS using LESS: http://lesscss.org.
+ */
+/*TODO: change this file to resources/css where are planned to live all css files
+ *TODO: configure dojo build tool to consider resources/css as all the css.files home.
+ */ 
+@import '../../dojo/resources/dojo.css';
+@import '../../dijit/themes/claro/claro.css';
+@import './layout.css';
