@@ -10,14 +10,21 @@
   </init>
 	-->
   
-  <!-- without allow, DWR isn't allowed to do anything
+
   <allow>
-    <filter class="..."/>
-    <create creator="..." javascript="..."/>
-    <convert converter="..." match="..."/>
+    
+    <!--  filter class="..."/ -->
+    
+    <create creator="new" scope="session" javascript="LoginControllerFacade">
+      <param name="class" value="br.edu.fzlbpms.template.security.login.LoginControllerFacade"/>
+      <include method="login"/>
+      <include method="getLoggedUser"/>
+      <include method="logoff"/>
+      <include method="getPrivilegies"/>      
+    </create>
   </allow>
  
- -->
+
   <!-- you may need to tell DWR about method signatures 
   <signatures>
     ...

@@ -7,20 +7,21 @@ To achieve this, the "mvn archetye:from-project" will be issued to create a arch
 
 This can be interesting for others because its configuration.
 This is configured to be a war (serlvet 2.5) package that can be deployed in a web container and in a osgi container too.
-This is based on war archetype cited in http://blog.nanthrax.net/tag/pax-web/.
+This is based on war a rchetype cited in http://blog.nanthrax.net/tag/pax-web/.
 
 Beside this, it was based on https://github.com/csnover/dojo-boilerplate/
-The (maybe) interesting point here is that, beside build benefits:
-the build will ocurr automatically at the build project
-if the dojo sdk was not present, it will be downloaded automatically base on <dojo.version> pom propertie.
+The (maybe) interesting point here is that, beside dojo build benefits:
+the build will ocurr automatically at maven project build.
+if the dojo sdk are not present, it will be downloaded automatically base on <dojo.version> pom propertie, by wagon maven plugin.
 
 I am learning all this technology, so any help is well accepted.
-This is a snapsht and be testing.
+Do not use this project template in production! Not yet!
+
 
 #-----------------------------------------------------------#
 HOW TO BUILD...
 #-----------------------------------------------------------#
-1) For a complete build
+1) For a complete build (either maven build as dojo app build)
 
 Check the ${dojo.app.skip_build} pom propertie:
  = true result in build.sh skip the dojo app building process.
@@ -48,6 +49,7 @@ check ${dojo.app.use_rhino_or_node} pom property value
  
 some another notes:
 mvn clean command will clean  webapp/resoureces/js/dist too.
+
 
  
 

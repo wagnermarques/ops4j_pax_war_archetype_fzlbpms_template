@@ -53,23 +53,7 @@ define([
 		'require' ], function (has, require) {
     
     
-    
-    var app = {
-    	WellcomeDialog : null,
-    	getCurrentUser : null //consider security issues here...    		
-    };
-    
-    
-    //var ifr = dom.byId("someIframe");
-  	//var newGlobal = ifr.contentWindow; // get the global scope object from the frame
-
-  	// Call a callback with different 'global' values and context.
-  	// win.withGlobal(newGlobal,  function(){
-	    // console.log("The current dojo.global is: ", win.global);
-	    // console.log("The current dojo.doc is: ", win.doc);
-	    // console.log("The current scope is: ", this);
-  	// }, this);
-    
+        
     if (has('host-browser')) {
     	console.debug(" 0 app main.js -> ok, in a browser...");
         /*
@@ -90,27 +74,52 @@ define([
         	[ 'dojo/dom',//dom.byId        	  
         	  '../app/mainAppController',        
         	  '../app/mainGuiController',
+        	  './LoginDialog',
         	  './BasicWelcomeDialog', 
         	  'dojo/domReady!' ],         	  
-        	function (dom, mainAppController, mainGuiController, WellcomeDialog) {
+        	function (dom, mainAppController, mainGuiController, LoginDialog, WellcomeDialog) {
         		
-        		//setting up a SINGLETON APP CONTROLLER
+        		
+        		
+        		
+        		//setting up mainAppController as a SINGLETON APP CONTROLLER
         		var mainAppControllerInstance = new mainAppController({});
         		mainAppControllerInstance.setApp_canvas_domNode(dom.byId("app_canvas"));        		 
            		
-           		//setting up a SINGLETON GUI CONTROLLER, ... and put it at the app controller
+        		
+           		//setting up mainGuiController as a SINGLETON GUI CONTROLLER,
+        		//... and put it at the app controller
+        		//..there are no other way to access mainGuiController but from mainAppControllerInstance        		
            		var mainGuiControllerInstance = (new mainGuiController({}))();//mainAppContruller must be created to get a mainguicontroller instance
            		mainAppControllerInstance.setMainGuiController(mainGuiControllerInstance);        			
-           		        
+           		
+           		
+           		/**
+        		 * 
+        		 * The login dialog is designed to close
+        		 * only if user login sucess
+        		 * otherwise it will not hide
+        		 * if it hided, in the onhide event, it will showed up again
+        		 * to not aprove unlogged user actions.
+        		 * 
+        		 * It is a simple design decision and not substitute the other security patterns
+        		 * to change it, still there are no easy way, it is necessary change LoginDialog code.
+        		 * Maybe the best bet is exclue line below and make a simple implementation here in.
+        		 * 
+        		 * Note, the login dialog not block the page.
+        		 */
+        		LoginDialog.showLoginDialog();
+        		        		
+        		
            		mainAppControllerInstance.widgetsStartup();
         	        	
-        		app.WellcomeDialog = new WellcomeDialog().placeAt(document.body);
+//        		app.WellcomeDialog = new WellcomeDialog().placeAt(document.body);
 
             	//  It is important to remember to always call startup on widgets after you have added them to the DOM.
             	//  It won’t hurt if you do it twice, but things will often not work right if you forget to do it.
-				app.WellcomeDialog.startup();
+//				app.WellcomeDialog.startup();
             	//  And now…
-				app.WellcomeDialog.show();
+//				app.WellcomeDialog.show();
         	});
     
         

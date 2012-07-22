@@ -8,10 +8,10 @@ define([
 
 	"dijit/Dialog", "dijit/registry",
 
-	"./gui_layout_definitions", // at own module:
+	"./gui_layout_definitions_default_one", // at own module:
 											// gui_layout_definition_constructor()
 	"./gui_eventsHandler",
-	"../ipgg_georef/readyMethodRunner",
+	"../app/readyMethodRunner",
 	"dojo/domReady!" ],
 
 	function(dom, domConstruct, domClass, on, keys, lang, array, event,

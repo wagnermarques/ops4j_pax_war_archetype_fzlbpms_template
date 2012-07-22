@@ -1,6 +1,6 @@
-<html>
+ <html>
 	<head>
-
+	
 		<!--
 		define it when to create funcional projects based on this template project
 		TODO: in case of create project wizard, it could be replaced dinamically
@@ -21,14 +21,24 @@
 		<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
 
 
-		<!-- Application-specific CSS should be stored in your application’s package to ensure portability and to allow
+		<!-- Application-specific CSS should be stored in your applications package to ensure portability and to allow
 		the build system to combine & minify it. -->		 
-		<link rel="stylesheet" href="resources/js/dist/app/resources/app.css">
+		<!-- here, the path to app runs.js loader configuration was changed compared to dojo-boilerplate-->
+		<!--  AFTER BUILDED -->  		
+			<link rel="stylesheet" href="resources/js/dist/app/resources/app.css">
+		
+		<!--  NO BUILDED YET (USE IT TO BE NOT NECESSARY WAIT TO BUILD TO SEE CHANGES IN THE CODE 
+			  CHANGE TO SCRIPT TAG ABOVE TO SEE FINAL CHANGES AFTER PROCEED WITH THE BUILD   		
+		<link rel="stylesheet" href="resources/js/app/resources/app.css">
+		-->
 				
 
 		<!--  D W R  -->
+		<script type='text/javascript' src='/ops4j_pax_war_archetype_fzlbpms_template/dwr/interface/LoginControllerFacade.js'></script>
 		<script type='text/javascript' src='/ops4j_pax_war_archetype_fzlbpms_template/dwr/engine.js'></script>
 		<script type='text/javascript' src='/ops4j_pax_war_archetype_fzlbpms_template/dwr/util.js'></script>
+
+		
 		<script type='text/javascript' src='resources/js/app/resources/images/org_logo.gif'></script>
 	</head>
 	<body class="claro">
@@ -68,6 +78,8 @@
 				</div>
 				
 				<div class="page_content_body">
+				
+					<div id="app_canvas"/>
 		  			<p>page content body...</p>
 				</div>
 				<div class="page_content_bottom">
@@ -87,7 +99,20 @@
 
 
 	      	<div id="fixed_bootom_footer_bar">
-				<div>sdg</div>	
+	      	    <div style="float:left">Usuario Logado = </div>
+				<div id="fzlbmps_template_logged_user" style="float:left">(no user logged in)</div>
+				<div id="fzlbmps_template_logoff_link" style="float:left; color:white; display: none;"> - logoff -</div>
+				<div id="fzlbmps_template_login_link"  style="float:left; color:white;"> - login -</div>
+				<div style="float:left; color:lime;">|=|</div>				
+				<div id="fzlbmps_template_now" style="float:left">
+					<script type="text/javascript">
+					<!--
+							var nowDate = new Date();
+						   	document.getElementById("fzlbmps_template_now").innerHTML = nowDate;						    
+						
+					//-->
+					</script>
+				</div>	
       		</div><!-- barraRodapeContainer -->      
 
 
@@ -97,7 +122,6 @@
 				<div>define message ...</div>	
       		</div><!-- barraRodapeContainer -->      
     	</div><!-- wrapper --->      
-
 		
 		
 		
@@ -109,7 +133,7 @@
 		Configuration options for the loader can be viewed at http://livedocs.dojotoolkit.org/loader/amd
 		along with a bunch of additional information about its features.
 
-		Below, we’re doing the following:
+		Below, were doing the following:
 
 		1. Enabling the AMD loader. (async: 1)
 		2. Fixing the loader to use normal AMD resolution of unregistered module paths (relative to baseDir)
@@ -117,15 +141,29 @@
 		(tlmSiblingOfDojo: 0)
 		3. Enabling debugging. (isDebug: 1)
 
-		The remainder of Dojo configuration, as well as our application’s instantiation, occurs within
+		The remainder of Dojo configuration, as well as our applications instantiation, occurs within
 		app/run.js. -->
+		
+		<!--  BUILDED -->  
+		<script data-dojo-config="async: 1, tlmSiblingOfDojo: 0, isDebug: 1" 
+				src="resources/js/dist/dojo/dojo.js" defer></script>
+		
+		<!--  NO BUILDED YET (USE IT TO BE NOT NECESSARY WAIT TO BUILD TO SEE CHANGES IN THE CODE 
+			  CHANGE TO SCRIPT TAG ABOVE TO SEE FINAL CHANGES AFTER PROCEED WITH THE BUILD  
 		<script data-dojo-config="async: 1, tlmSiblingOfDojo: 0, isDebug: 1"
-		src="resources/js/dist/dojo/dojo.js" defer></script>
-
+		src="resources/js/dojo/dojo.js" defer></script>
+		-->
+		
 		<!-- Load the loader configuration script. Note that this module ID is hard-coded in build.sh in order to provide
 		an optimised build that loads as few as one script for the entire application. If you change the name or
 		location of this module, you will need to update build.sh too. -->
 		<!-- here, the path to app runs.js loader configuration was changed compared to dojo-boilerplate-->
+		<!--  BUILDED -->  		
 		<script src="resources/js/dist/app/run.js" defer></script>
+		
+		<!--  NO BUILDED YET --> 		
+		<script src="resources/js/app/run.js" defer></script>
+		 
+		
 	</body>
 </html>

@@ -2,6 +2,8 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 
+
+
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>br.edu.fzlbpms.template</groupId>
 	<artifactId>ops4j_pax_war_archetype_fzlbpms_template</artifactId>
@@ -9,6 +11,8 @@ xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xs
 	<packaging>war</packaging>
 	<name>ops4j_pax_war_archetype_fzlbpms_template</name>
 	<description>ops4j_pax_war_archetype_fzlbpms_template war</description>
+
+
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 
@@ -22,20 +26,31 @@ xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xs
 		<dwr.version>3.0.M1</dwr.version>
 		<jetty.version>6.1.10</jetty.version>
 
-		<!-- fzlbpms plataform paths -->
-		<fzl_home>/run/media/wagner/fzlbpms_env/PROGSATIVOS/fzlbpms</fzl_home>
 
-		<!--
-		dojo app build parameters
+		<!-- fzlbpms plataform paths (at linux mounted partition) -->
+
+		<!-- with new fedora -->
+		<!-- fzl_home>/run/media/wagner/fzlbpms_env/PROGSATIVOS/fzlbpms</fzl_home -->
+		
+		<!-- with traditional linux -->
+		<fzl_home>/media/fzlbpms_env/PROGSATIVOS/fzlbpms</fzl_home>
+		
+		
+		
+		
+		<!--		
+			dojo app build parameters			
 		-->
 		<dojo.version>1.8.0b1</dojo.version>
+		
 		<!-- root dir of all js code -->
 		<dojo.app.baseUrl>${project.basedir}/src/main/webapp/resources/js</dojo.app.baseUrl>
+		
 		<!-- does not run buil.sh (the dojo app build script)
 		build dojo app is needed? not aways, maybe...
 		valid values is true or false
 		-->
-		<dojo.app.skip_build>true</dojo.app.skip_build>
+		<dojo.app.skip_build>false</dojo.app.skip_build>
 		
 		<!-- valid values are rhino and node
 			 default is node
@@ -45,6 +60,13 @@ xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xs
 			 http://livedocs.dojotoolkit.org/build/buildSystem
 		-->
 		<dojo.app.use_rhino_or_node>node</dojo.app.use_rhino_or_node>
+		
+		<!-- selenium temp notes 
+		from http://seleniumhq.org/download/maven.html
+		WebDriver implemenations like ChromeDriver, HtmlUnitDriver, FirefoxDriver, or InternetExplorerDriver
+		 
+		-->
+		
 	</properties>
 	<dependencies>
 		<dependency>
@@ -69,14 +91,49 @@ xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xs
 			<artifactId>commons-fileupload</artifactId>
 			<version>1.2</version>
 		</dependency>
+		
+		
 		<dependency>
-			<groupId>junit</groupId>
-			<artifactId>junit</artifactId>
-			<version>4.8.2</version>
-			<scope>test</scope>
+  			<groupId>org.testng</groupId>
+  			<artifactId>testng</artifactId>
+  			<version>6.1.1</version>	     
+  			<scope>test</scope>
 		</dependency>
+		
+		<dependency>
+        	<groupId>org.seleniumhq.selenium</groupId>
+        	<artifactId>selenium-java</artifactId>
+        	<version>2.24.1</version>
+        	
+    	</dependency>
+    	<dependency>
+        	<groupId>org.seleniumhq.selenium</groupId>
+        	<artifactId>selenium-server</artifactId>
+        	<version>2.24.1</version>
+        	<exclusions>
+        		<exclusion> 
+					<groupId>javax.servlet</groupId>
+					<artifactId>servlet-api</artifactId>				        
+				</exclusion>
+			</exclusions>	
+    	</dependency>    
 	</dependencies>
 	<build>
+		<resources>
+			<resource>
+				<directory>src/main/resources</directory>
+			</resource>
+			<resource>
+				<directory>src/test/resources </directory>
+			</resource>
+		</resources>
+		
+		<sourceDirectory>${basedir}/src/main/java</sourceDirectory>
+    	<scriptSourceDirectory>${basedir}/src/main/scripts</scriptSourceDirectory>
+    	<testSourceDirectory>${basedir}/src/test/java</testSourceDirectory>
+    	<outputDirectory>${basedir}/target/classes</outputDirectory>
+    	<testOutputDirectory>${basedir}/target/test-classes</testOutputDirectory>
+		
 		<plugins>
 
 			<!-- tooling dojo app integration
@@ -139,14 +196,13 @@ xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xs
 									<fileset dir="${project.build.directory}/dojo-release-${dojo.version}-src/util" includes="**"/>
 								</copy>
 								<exec
-								executable="${project.basedir}/build.sh" failonerror="true">
+									executable="${project.basedir}/build.sh" failonerror="true">
 									<arg line="${dojo.app.skip_build} ${dojo.app.use_rhino_or_node}"/>
 								</exec>
 
 							</tasks>
-						</configuration>
-						<phase>process-resources</phase>
-						<!-- phase>pre-integration-test</phase -->
+						</configuration>						
+						<phase>process-sources</phase>
 						<goals>
 							<goal>run</goal>
 						</goals>
@@ -243,6 +299,9 @@ xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xs
 				<configuration>
 					<testFailureIgnore>true</testFailureIgnore>
 					<failIfNoTests>false</failIfNoTests>
+		          	<suiteXmlFiles>
+            			<suiteXmlFile>src/test/resources/FZLBPMS_ExampleTest.xml</suiteXmlFile>
+          			</suiteXmlFiles>					
 				</configuration>
 			</plugin>
 
@@ -277,7 +336,55 @@ xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xs
 					</execution>
 				</executions>
 			</plugin>
+		
+			<!-- testng requires at least 1.5 -->
+			<plugin>
+        		<groupId>org.apache.maven.plugins</groupId>
+        		<artifactId>maven-compiler-plugin</artifactId>
+        		<version>2.5.1</version>
+        		<configuration>
+          			<source>1.6</source>
+          			<target>1.6</target>
+        		</configuration>
+      		</plugin>
 		</plugins>
+		
+		
+		<pluginManagement>
+			<plugins>
+				<!--This plugin's configuration is used to store Eclipse m2e settings only. It has no influence on the Maven build itself.-->
+				<plugin>
+					<groupId>org.eclipse.m2e</groupId>
+					<artifactId>lifecycle-mapping</artifactId>
+					<version>1.0.0</version>
+					<configuration>
+						<lifecycleMappingMetadata>
+							<pluginExecutions>
+								<pluginExecution>
+									<pluginExecutionFilter>
+										<groupId>
+											org.codehaus.mojo
+										</groupId>
+										<artifactId>
+											wagon-maven-plugin
+										</artifactId>
+										<versionRange>
+											[1.0-beta-4,)
+										</versionRange>
+										<goals>
+											<goal>download-single</goal>
+										</goals>
+									</pluginExecutionFilter>
+									<action>
+										<ignore></ignore>
+									</action>
+								</pluginExecution>
+							</pluginExecutions>
+						</lifecycleMappingMetadata>
+					</configuration>
+				</plugin>
+			</plugins>
+		</pluginManagement>
 	</build>
 	<!--
 	<scm>

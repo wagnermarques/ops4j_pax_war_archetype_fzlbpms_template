@@ -30,19 +30,15 @@ define(
 				_accordeonPanes : [
 					{
 						id: "accordPane_1",
-						title:"CADASTRO DE PACIENTES",
+						title:"TITLE 1, for this accordPane_1",
 						style: "",
-						content:	"<a id='accord1_lnk1' href='#' class='accord_lnk'>Listar/Pesquisar</a><p></p>"// +
-									//"<a id='accord1_lnk2' href='#' class='accord_lnk'>Inserir Novo</a><p></p>" +
-									//"<a id='accord1_lnk3' href='#' class='accord_lnk'>Excluir</a><p></p>",
+						content:	"change it in gui_layout_accordeon_widget.js file",
 					},
 					{
 						id:"accordPane_2",
-						title:"Rede Prote&ccedil;&atilde;o",
+						title:"TITLE 2, for this accordPane_2",
 						style: "",
-						content:   "<a  id='accord2_lnk1' href='#' class='accord_lnk'>Listar/Pesquisar</a><p></p>"// +	
-						           //"<a  id='accord2_lnk2' href='#' class='accord_lnk'>Inserir equipamento</a><p></p>" +
- 					               //"<a  id='accord2_lnk2' href='#' class='accord_lnk'>Excluir</a><p></p>"
+						content:   "the path file is root/resources/js/app/re"
 					}
 				],
 					
