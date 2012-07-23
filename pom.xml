@@ -16,10 +16,13 @@ xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xs
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 
+
 		<!-- plugins properties -->
 		<maven-bundle-plugin.version>2.3.4</maven-bundle-plugin.version>
 		<maven-war-plugin.version>2.1.1</maven-war-plugin.version>
 		<maven-surefire-plugin-version>2.12</maven-surefire-plugin-version>
+
+
 
 		<!-- dependencies properties -->
 		<servlet-api.version>2.5</servlet-api.version>
@@ -27,13 +30,17 @@ xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xs
 		<jetty.version>6.1.10</jetty.version>
 
 
+
 		<!-- fzlbpms plataform paths (at linux mounted partition) -->
 
 		<!-- with new fedora -->
-		<!-- fzl_home>/run/media/wagner/fzlbpms_env/PROGSATIVOS/fzlbpms</fzl_home -->
+		<fzl_home>/run/media/wagner/fzlbpms_env/PROGSATIVOS/fzlbpms</fzl_home>
 		
-		<!-- with traditional linux -->
+		<!-- with traditional linux 
 		<fzl_home>/media/fzlbpms_env/PROGSATIVOS/fzlbpms</fzl_home>
+		-->
+		<smx4_home>${fzl_home}/integrated/apache-servicemix-4.4.1-fuse-07-11</smx4_home>
+		<smx4_deploy_folder>${smx4_home}/deploy</smx4_deploy_folder>
 		
 		
 		
@@ -50,7 +57,7 @@ xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xs
 		build dojo app is needed? not aways, maybe...
 		valid values is true or false
 		-->
-		<dojo.app.skip_build>false</dojo.app.skip_build>
+		<dojo.app.skip_build>true</dojo.app.skip_build>
 		
 		<!-- valid values are rhino and node
 			 default is node
@@ -66,6 +73,7 @@ xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xs
 		WebDriver implemenations like ChromeDriver, HtmlUnitDriver, FirefoxDriver, or InternetExplorerDriver
 		 
 		-->
+		
 		
 	</properties>
 	<dependencies>
@@ -119,6 +127,7 @@ xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xs
     	</dependency>    
 	</dependencies>
 	<build>
+		<finalName>ops4j_pax_war_archetype_fzlbpms_template</finalName>
 		<resources>
 			<resource>
 				<directory>src/main/resources</directory>
@@ -179,7 +188,6 @@ xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xs
 						<id>building_dojo</id>
 						<configuration>
 							<tasks>
-
 								<untar compression="gzip"
 								src="${project.basedir}/dojo-release-${dojo.version}-src.tar.gz"
 								dest="${project.build.directory}"/>
@@ -202,7 +210,7 @@ xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xs
 
 							</tasks>
 						</configuration>						
-						<phase>process-sources</phase>
+						<phase>generate-resources</phase>
 						<goals>
 							<goal>run</goal>
 						</goals>
@@ -236,6 +244,21 @@ xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xs
 							<goal>run</goal>
 						</goals>
 					</execution>
+					<execution>
+						<id>deploy_on_smx4</id>
+						<configuration>
+							<tasks>							
+								<echo message="coping ${project.build.directory}/${project.build.finalName}.* to dir ${smx4_deploy_folder}"/>
+								<copy  todir="${smx4_deploy_folder}" >
+									<fileset dir="${project.build.directory}" includes="${project.build.finalName}.*"/>
+								</copy>
+							</tasks>
+						</configuration>						
+						<phase>deploy</phase>
+						<goals>
+							<goal>run</goal>
+						</goals>
+					</execution>					
 				</executions>
 			</plugin>
 

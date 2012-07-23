@@ -51,5 +51,16 @@ some another notes:
 mvn clean command will clean  webapp/resoureces/js/dist too.
 
 
+
+#-----------------------------------------------------------#
+LoginDialog admin/admin123 
+#-----------------------------------------------------------#
+When main page loads, a login dialog appears.
+This is a decision desing that another bpms projects will implement.
+Change it is not dificult.
+
+
+
+
  
 
