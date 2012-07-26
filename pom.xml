@@ -24,10 +24,12 @@ xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xs
 
 
 
+
 		<!-- dependencies properties -->
 		<servlet-api.version>2.5</servlet-api.version>
 		<dwr.version>3.0.M1</dwr.version>
 		<jetty.version>6.1.10</jetty.version>
+
 
 
 
@@ -41,12 +43,14 @@ xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xs
 		-->
 		<smx4_home>${fzl_home}/integrated/apache-servicemix-4.4.1-fuse-07-11</smx4_home>
 		<smx4_deploy_folder>${smx4_home}/deploy</smx4_deploy_folder>
-		
+				
 		
 		
 		
 		<!--		
 			dojo app build parameters			
+		
+		<dojo.version>1.8.0rc1</dojo.version>
 		-->
 		<dojo.version>1.8.0b1</dojo.version>
 		
@@ -88,6 +92,16 @@ xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xs
 			<groupId>org.directwebremoting</groupId>
 			<artifactId>dwr</artifactId>
 			<version>${dwr.version}</version>
+			<exclusions>
+        		<exclusion> 
+					<groupId>javax.servlet</groupId>
+					<artifactId>servlet-api</artifactId>				        
+				</exclusion>
+        		<exclusion> 
+					<groupId>com.google.code.guice</groupId>
+					<artifactId>guice</artifactId>				        
+				</exclusion>				
+			</exclusions>
 		</dependency>
 		<dependency>
 			<groupId>commons-logging</groupId>
@@ -100,7 +114,7 @@ xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xs
 			<version>1.2</version>
 		</dependency>
 		
-		
+		<!-- http://team.ops4j.org/wiki/display/ops4j/Guice-OSGi --> 		
 		<dependency>
   			<groupId>org.testng</groupId>
   			<artifactId>testng</artifactId>
@@ -108,11 +122,13 @@ xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xs
   			<scope>test</scope>
 		</dependency>
 		
+	
+		
+	<!-- 
 		<dependency>
         	<groupId>org.seleniumhq.selenium</groupId>
         	<artifactId>selenium-java</artifactId>
-        	<version>2.24.1</version>
-        	
+        	<version>2.24.1</version>        	
     	</dependency>
     	<dependency>
         	<groupId>org.seleniumhq.selenium</groupId>
@@ -124,8 +140,11 @@ xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xs
 					<artifactId>servlet-api</artifactId>				        
 				</exclusion>
 			</exclusions>	
-    	</dependency>    
+    	</dependency>
+    	 -->    
 	</dependencies>
+	
+	
 	<build>
 		<finalName>ops4j_pax_war_archetype_fzlbpms_template</finalName>
 		<resources>
@@ -173,7 +192,7 @@ xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xs
 							<skip>true</skip>
 							<serverId>dojotoolkit</serverId>
 							<url>http://download.dojotoolkit.org/release-${dojo.version}</url>
-							<!-- fromFile>dojo-release-${dojo.version}.tar.gz</fromFile -->
+								<!-- fromFile>dojo-release-${dojo.version}.tar.gz</fromFile -->
 							<fromFile>dojo-release-${dojo.version}-src.tar.gz</fromFile>
 							<toDir>${project.basedir}</toDir>
 						</configuration>
@@ -183,10 +202,12 @@ xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xs
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-antrun-plugin</artifactId>
+				<version>1.7</version>
 				<executions>
 					<execution>
 						<id>building_dojo</id>
 						<configuration>
+						    <skip>true</skip>
 							<tasks>
 								<untar compression="gzip"
 								src="${project.basedir}/dojo-release-${dojo.version}-src.tar.gz"
@@ -204,7 +225,7 @@ xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xs
 									<fileset dir="${project.build.directory}/dojo-release-${dojo.version}-src/util" includes="**"/>
 								</copy>
 								<exec
-									executable="${project.basedir}/build.sh" failonerror="true">
+									executable="${project.basedir}/build.sh" failonerror="false">
 									<arg line="${dojo.app.skip_build} ${dojo.app.use_rhino_or_node}"/>
 								</exec>
 
@@ -254,7 +275,7 @@ xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xs
 								</copy>
 							</tasks>
 						</configuration>						
-						<phase>deploy</phase>
+						<phase>package</phase>
 						<goals>
 							<goal>run</goal>
 						</goals>
@@ -278,19 +299,52 @@ xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xs
 							<instructions>
 								<Bundle-SymbolicName>${project.artifactId}</Bundle-SymbolicName>
 								<Bundle-Version>${project.version}</Bundle-Version>
-
-								<!--
-								nao sei exatamente como funciona esses dependencias
-								TODO tem que estudar isso...
-								<Embed-Dependency>*;scope=compile|runtime</Embed-Dependency>
-								<Embed-Directory>WEB-INF/lib</Embed-Directory>
-								<Embed-Transitive>true</Embed-Transitive>
-								<Import-Package>*;resolution:=optional</Import-Package>
-								<Web-ContextPath>/sample</Web-ContextPath>
-								<Webapp-Context>/sample</Webapp-Context>
-								<_wab>src/main/webapp</_wab>
-								-->
-								<Import-Package>*</Import-Package>
+								
+								<!-- 
+									to dependencies be avaible for osgi classloader
+								 -->
+								
+                                <Export-Package>*</Export-Package>
+                                <Private-Package>javax.jws.*</Private-Package>
+                                <DynamicImport-Package>javax.*, org.*</DynamicImport-Package>
+                                <Bundle-ClassPath>., WEB-INF/classes</Bundle-ClassPath>
+                                <Embed-Directory>WEB-INF/lib</Embed-Directory>
+                                <Embed-Dependency>*;scope=compile|runtime</Embed-Dependency>
+                                <Embed-Transitive>true</Embed-Transitive>
+                                <Import-Package> 
+                                    !com.google.inject, 
+                                    !com.google.inject.binder, 
+                                    !com.google.inject.util,
+                                    !com.opensymphony.webwork.dispatcher,
+                                    !com.opensymphony.webwork.dispatcher.mapper,
+                                    !com.opensymphony.xwork,
+                                    !com.opensymphony.xwork.config,
+                                    !com.opensymphony.xwork.util,
+                                    !javax.faces,
+                                    !javax.faces.application,
+                                    !javax.faces.context,
+                                    !javax.faces.el,
+                                    !javax.faces.lifecycle,
+                                    !javax.portlet,
+                                    !net.sf.hibernate,
+                                    !nu.xom,
+                                    !org.apache.bsf,
+                                    
+                                    !org.apache.commons.io,
+                                    !org.apache.commons.io.output,
+                                    
+                                    !org.apache.log,
+                                    
+                                    !org.apache.struts.action,
+                                    !org.apache.struts.config,
+                                    !org.apache.struts.util,
+                                    !org.hibernate,
+                                    !org.hibernate.classic,
+                                    !org.hibernate.engine,
+                                    !org.hibernate.proxy,
+                                    !org.springframework.*,
+                                    javax.servlet, javax.servlet.http, !javax.jws, * </Import-Package>
+								
 							</instructions>
 						</configuration>
 					</execution>
@@ -322,9 +376,11 @@ xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xs
 				<configuration>
 					<testFailureIgnore>true</testFailureIgnore>
 					<failIfNoTests>false</failIfNoTests>
+					<!-- for future projects based on this one... 
 		          	<suiteXmlFiles>
             			<suiteXmlFile>src/test/resources/FZLBPMS_ExampleTest.xml</suiteXmlFile>
-          			</suiteXmlFiles>					
+          			</suiteXmlFiles>
+          			 -->					
 				</configuration>
 			</plugin>
 
@@ -409,6 +465,9 @@ xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xs
 			</plugins>
 		</pluginManagement>
 	</build>
+	
+	
+			
 	<!--
 	<scm>
 		<connection>scm:svn:http://somerepository.com/svn_repo/trunk</connection>
