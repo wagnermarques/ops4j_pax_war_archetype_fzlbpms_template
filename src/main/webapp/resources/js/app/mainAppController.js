@@ -1,11 +1,9 @@
-//inspiracao 
+//inspirations:
 //http://dojotoolkit.org/documentation/tutorials/1.7/recipes/app_controller/
 //http://dojotoolkit.org/documentation/tutorials/1.7/recipes/app_controller/
-//MUITO PROVAVELMENTE VAI USAR DEFERREDS
 //http://dojotoolkit.org/documentation/tutorials/1.7/promises/
 define(
 		["dojo/dom",
-		 "dojo/dom-construct",
 		 "dojo/dom-construct",
 		 
 		 "dojo/on", 
@@ -31,87 +29,120 @@ define(
     		Dialog, registry) {
 			
 			
-			window.mainAppController = null;
+			console.log("mainAppController -> Running...");
 			
 			
-            if(window.mainAppController != null){            	
+			
+            if(window.mainAppController != null){
+            console.debug("mainAppController.js -> [true] if(window.mainAppController != null)");	
    	 			return function(jsHashObjectToInitializeMainAppController){
+   	 				console.log("mainAppController.js -> window.mainAppController != null, returning window.mainAppController = "+window.mainAppController);
    	 				return window.mainAppController;
-   	 			}    	 		
-   	 		}else{    	 			
-   	 			return function(jsHashObjectToInitializeMainAppController){     					   	 			   	 			
+   	 			};    	 		
+   	 		}else{
+   	 		console.debug("mainAppController.js -> [false] if(window.mainAppController != null)");
+   	 			return function(jsHashObjectToInitializeMainAppController){
+   	 			console.log("mainAppController.js -> window.mainAppController == null, I will instanciate it...");
    	 				require(["dojo/_base/declare"],function(declare){    	 				
    	 					window.mainAppController = (declare(null, {							
-
-   	 					// --apesar dessa classe ser um singleton, ou seja,
-   	 					// nao haver outras instancias delas no   	 				
-   	 					// programa, nao he necessario que seus campos sejam
-   	 					// da instancia em particular, pode se
-   	 					// estaticos da classe sem problema, por isso estao
-   	 					// declarados aqui e nao no construtor
-    	 			
    	 					
-   	 					_guiControllers : {    	 				
-   	 						mainGuiController : null,
-    	 					specificViewController: null
-    	 				},    	 					
+   	 						 //private properties
+   	 							_guiControllers : {    	 				
+   	 								mainGuiController : null,
+   	 								specificViewController: null
+   	 							},    	 					
     	 				
-    	 				app_canvas_domNode : null,
+   	 							_appStores : {    	 					
+   	 								stores : {},    	 					
+   	 								queries : {}					
+   	 							},    	 						
     	 				
+   	 							//OpenAjax objects repositories
+   	 							_OpenAjaxHub_ManagedHubs : {},
+   	 							
+   	 							_OpenAjaxHub_Containers:{},
+   	 							
+   	 							_OpenAjaxHub_Clients:{},
+   	 							
+   	 							
+   	 							//public methods
+   	 							getMainGuiController : function(){
+   	 									return this._guiControllers.mainGuiController;
+   	 							},
     	 				
-    	 				_appStores : {    	 					
-    	 					stores : {    	 						
-    	 						// storeName:storeReference    	 						
-    	 					},    	 					
-    	 					queries : {    	 						
-    	 						// querieId:querieDefinition    	 					
-    	 					}					
-    	 				},    	 						
-    	 				
-    	 				
-    	 				getMainGuiController : function(){
-    	 					return this._guiControllers.mainGuiController;
-    	 				},
-    	 				
-    	 				setMainGuiController : function(mainGuiControllerInstance){
-    	 					console.debug("mainAppController.js -> setMainGuiController : function(mainGuiControllerInstance){...");
-    	 					console.debug("mainAppController.js -> setMainGuiController : function(mainGuiControllerInstance){... mainGuiControllerInstance=...");
-    	 					console.debug(mainGuiControllerInstance);
-    	 					this._guiControllers.mainGuiController = mainGuiControllerInstance;    	 					    	 			
-    	 				},
-    	 				
-    	 				getApp_canvas_domNode : function(){
-    	 					return this.app_canvas_domNode;
-    	 				},
-    	 				setApp_canvas_domNode : function(app_canvas_domNode){
-    	 					this.app_canvas_domNode = app_canvas_domNode; 
-    	 				},
+   	 							setMainGuiController : function(mainGuiControllerInstance){
+   	 								console.debug("mainAppController.js -> setMainGuiController : function(mainGuiControllerInstance){...");
+   	 								console.debug("mainAppController.js -> setMainGuiController : function(mainGuiControllerInstance){... mainGuiControllerInstance=...");
+   	 								console.debug(mainGuiControllerInstance);
+   	 								this._guiControllers.mainGuiController = mainGuiControllerInstance;    	 					    	 			
+   	 							},
+    	 				   	 				   
+   	 							   	 							
+   	 							widgetsStartup : function() {    	 		        
+   	 								console.debug(" _1# mainAppController.js -> widgetsStartup : function() {...");
+   	 								console.debug(" _1# mainAppController.js -> widgetsStartup : function() {... starting up widgetns in domNode = "+this.app_canvas_domNode);   	 		            	
+   	 								this._guiControllers.mainGuiController.widgetsStartup(this.app_canvas_domNode);    	 		         
+   	 							},
 
+   	 							
+   	 							
+   	 							//OpenAjax ManagedHubs
+   	 							setOpenAjaxHub_ManagedHub : function(/*String*/ name, /*OpenAjax.hub.InlineContainer*/ mh){
+   	 								console.debug("mainAppController.js -> setOpenAjaxHub_ManagedHub : function("+name+", "+mh+"){..");
+   	 								this._OpenAjaxHub_ManagedHubs[name]=mh;
+   	 							},
+   	 							
+   	 							getOpenAjaxHub_ManagedHub : function(/*String*/ mhName){
+   	 								console.debug("mainAppController.js -> getOpenAjaxHub_ManagedHub : function("+mhName+"){...");
+   	 								return this._OpenAjaxHub_ManagedHubs[mhName];
+   	 							},
 
-    	 				
-    	 				// ---- private methods    	 		        
-    	 				widgetsStartup : function() {    	 		        
-    	 					console.debug(" _1# mainAppController.js -> widgetsStartup : function() {...");
-    	 					console.debug(" _1# mainAppController.js -> widgetsStartup : function() {... starting up widgetns in domNode = "+this.app_canvas_domNode);
-   	 		            	// some context preparations if was needed
-   	 		            	// TODO _guiController.getDataStores();
-   	 		            	// _guiController.getDataStores(); 	 		            
+   	 							get_ALL_OpenAjaxHub_ManagedHubs : function(){
+   	 								return this._OpenAjaxHub_ManagedHubs;
+   	 							},
+   	 							
+   	 						    //OpenAjax Containers
+   	 							setOpenAjaxHub_Container : function(/*String*/ name, /*OpenAjax.hub.InlineContainer*/ c){
+   	 								console.debug("mainAppController.js -> setOpenAjaxHub_Container : function("+name+", "+ c +"){,,,");
+   	 								this._OpenAjaxHub_Containers[name]=c;
+   	 							},
+   	 							
+   	 							getOpenAjaxHub_Container : function(/*String*/ cName){
+   	 								console.debug("mainAppController.js -> getOpenAjaxHub_Container : function("+cName+"){..."); 
+   	 								return this._OpenAjaxHub_Containers[cName];
+   	 							},
+
+   	 							get_ALL_OpenAjaxHub_Containers : function(){
+   	 								return this._OpenAjaxHub_Containers;
+   	 							},
+
+   	 							
+   	 						    //OpenAjax Clients
+   	 							setOpenAjaxHub_Client : function(/*String*/ name, /*OpenAjax.hub.InlineContainer*/ cli){
+   	 								console.debug("mainAppController.js -> setOpenAjaxHub_Container : function("+name+", "+ cli +"){,,,");
+   	 								this._OpenAjaxHub_Clients[name]=cli;
+   	 							},
+   	 							
+   	 							getOpenAjaxHub_Client : function(/*String*/ cName){
+   	 								console.debug("mainAppController.js -> getOpenAjaxHub_Container : function("+cName+"){..."); 
+   	 								return this._OpenAjaxHub_Clients[cName];
+   	 							},
+
+   	 							get_ALL_OpenAjaxHub_Clients : function(){
+   	 								return this._OpenAjaxHub_Clients;
+   	 							},
+   	 							
+   	 							
+   	 							
+   	 							//constructor
+   	 							constructor : function(args){	
+   	 								console.debug(" _1 mainAppController -> constructor : function(args){... args="+args);
     	 					
-   	 		            	this._guiControllers.mainGuiController.widgetsStartup(this.app_canvas_domNode);    	 		         
-    	 				},
-
-
-    	 				constructor : function(args){	
-    	 					console.debug(" _1 mainAppController -> constructor : function(args){... args="+args);
-    	 		            
-//    	 					this.initApp = function() {
-//    	 						this._initApp(this.app_canvas_domNode);
-//    	 		            };    	 		           
-    	 					
-    	 				}// constructor
-	 		            
-   	 				}))(jsHashObjectToInitializeMainAppController);   	 						
-   	 				});//require(["dojo/_base/declare"],function(){
+   	 							}// constructor
+	 		               	 					
+   	 					}))(jsHashObjectToInitializeMainAppController);//window.mainAppController = (declare(null, {   	 						
+   	 				});//require(["dojo/_base/declare"],function(){   	 				
+   	 				console.debug("mainAppController.js -> That is my mainAppController instance ="+window.mainAppController);
    	 				return window.mainAppController;
    	 			}//return function(jsHashObjectToInitializeMainAppController){	
    	 		}//}else{

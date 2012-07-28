@@ -205,13 +205,15 @@ xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xs
 				<version>1.7</version>
 				<executions>
 					<execution>
-						<id>building_dojo</id>
+						<id>unpacking_dojo</id>
 						<configuration>
 						    <skip>true</skip>
 							<tasks>
+								
 								<untar compression="gzip"
 								src="${project.basedir}/dojo-release-${dojo.version}-src.tar.gz"
 								dest="${project.build.directory}"/>
+								
 								<copy  todir="${dojo.app.baseUrl}/dojo" >
 									<fileset dir="${project.build.directory}/dojo-release-${dojo.version}-src/dojo" includes="**"/>
 								</copy>
@@ -241,20 +243,26 @@ xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xs
 						<configuration>
 							<tasks>
 
-								<delete>
-									<fileset dir="${dojo.app.baseUrl}/dist" includes="**"/>
+							    <echo message="deleting... ${dojo.app.baseUrl}  /dist /dojo /dijit /util"/>
+							    
+								<delete  includeemptydirs="true">
+									<fileset dir="${dojo.app.baseUrl}/dist" includes="**/*"/>
 								</delete>
-								<delete>
-									<fileset dir="${dojo.app.baseUrl}/dojo" includes="**"/>
+								
+								<delete  includeemptydirs="true">
+									<fileset dir="${dojo.app.baseUrl}/dojo" includes="**/*"/>
 								</delete>
-								<delete>
-									<fileset dir="${dojo.app.baseUrl}/dijit" includes="**"/>
+								
+								<delete  includeemptydirs="true">
+									<fileset dir="${dojo.app.baseUrl}/dijit" includes="**/*"/>
 								</delete>
-								<delete>
-									<fileset dir="${dojo.app.baseUrl}/dojox" includes="**"/>
+								
+								<delete  includeemptydirs="true">
+									<fileset dir="${dojo.app.baseUrl}/dojox" includes="**/*"/>
 								</delete>
-								<delete >
-									<fileset dir="${dojo.app.baseUrl}/util" includes="**"/>
+								
+								<delete  includeemptydirs="true" >
+									<fileset dir="${dojo.app.baseUrl}/util" includes="**/*"/>
 								</delete>
 
 							</tasks>
@@ -275,7 +283,7 @@ xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xs
 								</copy>
 							</tasks>
 						</configuration>						
-						<phase>package</phase>
+						<phase>deploy</phase>
 						<goals>
 							<goal>run</goal>
 						</goals>

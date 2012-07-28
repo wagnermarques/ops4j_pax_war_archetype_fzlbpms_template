@@ -20,34 +20,6 @@
 
 
 
-//http://dojotoolkit.org/reference-guide/dojo/_base/window.html
-/*
- * dojo._base.window
-since:	V?
-
-dojo._base.window 
-contains functions for dealing with the document-wide DOM and context related stuff.
-
-As with all dojo._base components, these functions are included within Dojo Base. 
-You get this functionality by just including dojo.js in your page.
-Features
-
-    dojo.doc
-    Alias for the current document
-
-    dojo.body
-    Return the body element of the document
-
-    dojo.setContext
-    Changes the behavior of many core Dojo functions that deal with namespace and DOM lookup
-
-    dojo.withGlobal
-    Call callback with globalObject as dojo.global and globalObject.document as dojo.doc
-
-    dojo.withDoc
-    Call callback with documentObject as dojo.doc
- */
-
 define([ 
 		'dojo/has', 
 		'require' ], function (has, require) {
@@ -71,26 +43,25 @@ define([
         
         
         require(
-        	[ 'dojo/dom',//dom.byId        	  
-        	  '../app/mainAppController',        
+        	[ '../app/mainAppController',        
         	  '../app/mainGuiController',
         	  './LoginDialog',
         	  './BasicWelcomeDialog', 
         	  'dojo/domReady!' ],         	  
-        	function (dom, mainAppController, mainGuiController, LoginDialog, WellcomeDialog) {
-        		
-        		
+        	function (mainAppController, mainGuiController, LoginDialog, WellcomeDialog) {
         		
         		
         		//setting up mainAppController as a SINGLETON APP CONTROLLER
+        		console.debug("main.js ->  var mainAppControllerInstance = new mainAppController({});");
         		var mainAppControllerInstance = new mainAppController({});
-        		mainAppControllerInstance.setApp_canvas_domNode(dom.byId("app_canvas"));        		 
-           		
+        		
         		
            		//setting up mainGuiController as a SINGLETON GUI CONTROLLER,
         		//... and put it at the app controller
-        		//..there are no other way to access mainGuiController but from mainAppControllerInstance        		
+        		//..there are no other way to access mainGuiController but from mainAppControllerInstance
+        		console.debug("main.js ->  var mainGuiControllerInstance = (new mainGuiController({}))()");
            		var mainGuiControllerInstance = (new mainGuiController({}))();//mainAppContruller must be created to get a mainguicontroller instance
+           		           		
            		mainAppControllerInstance.setMainGuiController(mainGuiControllerInstance);        			
            		
            		
@@ -109,9 +80,7 @@ define([
         		 * Note, the login dialog not block the page.
         		 */
         		LoginDialog.showLoginDialog();
-        		        		
-        		
-           		mainAppControllerInstance.widgetsStartup();
+        	
         	        	
 //        		app.WellcomeDialog = new WellcomeDialog().placeAt(document.body);
 

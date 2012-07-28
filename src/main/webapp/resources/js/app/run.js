@@ -25,6 +25,7 @@ require({
         'dojox',
         'app',
         'fzlbpms',
+        'OpenAjax_Hub_2.0.7',
 
         // For reference, this is what a more verbose package declaration looks like.
         { name: 'dbp', location: 'dbp', packageMap: {} }
