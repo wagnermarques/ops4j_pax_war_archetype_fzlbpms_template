@@ -18,9 +18,10 @@ I am learning all this technology, so any help is well accepted.
 Do not use this project template in production! Not yet!
 
 
-#-----------------------------------------------------------#
+
 HOW TO BUILD...
-#-----------------------------------------------------------#
+========================================
+
 1) For a complete build (either maven build as dojo app build)
 
 Check the ${dojo.app.skip_build} pom propertie:
@@ -46,8 +47,24 @@ check ${dojo.app.use_rhino_or_node} pom property value
  = node (or any other value): node will be used to proceed with dojo app build
  = rhino: rhino will be used
  
+How to create a archetype from this one
+========================================
+$>cd this_project_home
+$>mvn archetype:create-from-project
+$>cd target/generated-sources/archetype
+$>mvn install
+To see the result:
+$> mvn archetype:generate 
+
+(at my computer...)
+(... many archetypes avaible)
+618: local -> br.edu.fzlbpms.template:ops4j_pax_war_archetype_fzlbpms_template-archetype (ops4j_pax_war_archetype_fzlbpms_template war)
+Choose a number or apply filter (format: [groupId:]artifactId, case sensitive contains): 205: 
+
+
  
-some another notes:
+Some another notes:
+========================================
 mvn clean command will clean  webapp/resoureces/js/dist too.
 
 
